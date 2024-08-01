@@ -1,6 +1,6 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
+# from dotenv import load_dotenv
+# load_dotenv()
 # db connection URL (In order to submit your project do NOT change this value!!!)
 DB_URL = os.environ['DB_URL']
 # entities properties
@@ -9,3 +9,4 @@ MOVIE_FIELDS = ['id', 'name', 'year', 'genre']
 
 # date of birth format
 DATE_FORMAT = '%d.%m.%Y'
+PORT=8000

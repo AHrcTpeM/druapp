@@ -1,11 +1,13 @@
 import pytest
 import requests
 
-ACTOR_ID_ROUTE = 'http://127.0.0.1:8000/api/actor'
-ACTOR_REL_ROUTE = 'http://127.0.0.1:8000/api/actor-relations'
+from settings.constants import PORT
 
-MOVIE_ID_ROUTE = 'http://127.0.0.1:8000/api/movie'
-MOVIE_REL_ROUTE = 'http://127.0.0.1:8000/api/movie-relations'
+ACTOR_ID_ROUTE = f'http://127.0.0.1:{PORT}/api/actor'
+ACTOR_REL_ROUTE = f'http://127.0.0.1:{PORT}/api/actor-relations'
+
+MOVIE_ID_ROUTE = f'http://127.0.0.1:{PORT}/api/movie'
+MOVIE_REL_ROUTE = f'http://127.0.0.1:{PORT}/api/movie-relations'
 
 
 @pytest.mark.parametrize(
@@ -92,7 +94,6 @@ def test_movie_add_relation(body_add_movie, movie_id_corrected, body_add_actor, 
     # add relation to movie
     body_add_rel = dict(id=movie_id, relation_id=actor_id)
     resp_add_rel = requests.put(MOVIE_REL_ROUTE, data={**body_add_rel, **movie_id_corrected,  **actor_id_corrected})
-
     assert resp_add_rel.status_code == expected_response
 
 

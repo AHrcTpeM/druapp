@@ -50,7 +50,6 @@ def add_actor():
     data = get_request_data()
     required_fields = {'name', 'gender', 'date_of_birth'}
     allowed_fields = required_fields
-    print('data', data)
 
     if not required_fields.issubset(data.keys()):
         err = 'Missing required fields'
@@ -67,6 +66,11 @@ def add_actor():
         except ValueError:
             err = 'Date of birth must be in format ' + DATE_FORMAT
             return make_response(jsonify(error=err), 400)
+
+    existing_actor = Actor.query.filter_by(name=data['name']).first()
+    if existing_actor:
+        existing_actor_data = {k: v for k, v in existing_actor.__dict__.items() if k in ACTOR_FIELDS}
+        return make_response(jsonify(existing_actor_data), 200)
 
     new_record = Actor.create(**data)
     new_actor = {k: v for k, v in new_record.__dict__.items() if k in ACTOR_FIELDS}
@@ -142,7 +146,6 @@ def actor_add_relation():
     Add a movie to actor's filmography
     """
     data = get_request_data()
-    print('actor_add_relation', data)
     if 'id' not in data.keys() or 'relation_id' not in data.keys():
         err = 'id and relation_id must be specified'
         return make_response(jsonify(error=err), 400)

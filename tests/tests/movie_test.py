@@ -1,8 +1,10 @@
 import pytest
 import requests
 
-MOVIE_LIST_ROUTE = 'http://127.0.0.1:8000/api/movies'
-MOVIE_ID_ROUTE = 'http://127.0.0.1:8000/api/movie'
+from settings.constants import PORT
+
+MOVIE_LIST_ROUTE = f'http://127.0.0.1:{PORT}/api/movies'
+MOVIE_ID_ROUTE = f'http://127.0.0.1:{PORT}/api/movie'
 
 
 @pytest.mark.parametrize(('body', 'expected_response'), [(dict([]), 200)])
@@ -78,6 +80,7 @@ def test_update_movie(body_create, body_update, expected_response):
 @pytest.mark.parametrize(
     ('body', 'expected_response'),
     [
+        (dict(name='The Dark Knight', genre='action', year='2008'), 200),
         (dict(name='Argo', genre='drama', year='2012'), 200),
          (dict([]), 400), # id should be specified
         (dict(id='one'), 400), # id should be integer

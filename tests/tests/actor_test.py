@@ -1,14 +1,15 @@
 import pytest
 import requests
 
-ACTOR_LIST_ROUTE = 'http://127.0.0.1:8000/api/actors'
-ACTOR_ID_ROUTE = 'http://127.0.0.1:8000/api/actor'
+from settings.constants import PORT
+
+ACTOR_LIST_ROUTE = f'http://127.0.0.1:{PORT}/api/actors'
+ACTOR_ID_ROUTE = f'http://127.0.0.1:{PORT}/api/actor'
 
 
 @pytest.mark.parametrize(('body', 'expected_response'), [(dict([]), 200)])
 def test_get_all_actors(body, expected_response):
     response = requests.get(ACTOR_LIST_ROUTE, data=body)
-    print(response)
     assert response.status_code == expected_response
 
 
@@ -78,6 +79,7 @@ def test_update_actor(body_create, body_update, expected_response):
 
 @pytest.mark.parametrize(('body', 'expected_response'),
     [
+        (dict(name='Zendaya', gender='female', date_of_birth='09.01.1996'), 200),
         (dict(name='Dwayne Johnson', gender='male', date_of_birth='05.09.1972'), 200),
         (dict([]), 400), # id should be specified
         (dict(id='one'), 400), # id should be integer

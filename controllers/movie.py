@@ -67,6 +67,11 @@ def add_movie():
             err = 'Year must be integer'
             return make_response(jsonify(error=err), 400)
 
+    existing_movie = Movie.query.filter_by(name=data['name']).first()
+    if existing_movie:
+        existing_movie_data = {k: v for k, v in existing_movie.__dict__.items() if k in MOVIE_FIELDS}
+        return make_response(jsonify(existing_movie_data), 200)
+
     new_record = Movie.create(**data)
     new_movie = {k: v for k, v in new_record.__dict__.items() if k in MOVIE_FIELDS}
     return make_response(jsonify(new_movie), 200)
@@ -157,7 +162,6 @@ def movie_add_relation():
     if not actor or not movie:
         err = 'Record with such id does not exist'
         return make_response(jsonify(error=err), 400)
-
     movie = Movie.add_relation(movie_id, actor)
     rel_movie = {k: v for k, v in movie.__dict__.items() if k in MOVIE_FIELDS}
     rel_movie['cast'] = str(movie.cast)
